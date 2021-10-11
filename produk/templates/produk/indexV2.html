@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block css %}
+<style>
+    td {
+        vertical-align: center;
+    }
+</style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <div class="container" style="margin-top:13px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container">
+      <div class="text-right" style="margin-bottom:20px;">
+          {% if request.user|has_group:"Designer" %}
+          <div class="btn-group">
+              <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{% url "produk:newVarian" %}?next={{ request.path|urlencode }}">Brand-Model-Varian</a>
+                  <a class="dropdown-item" href="{% url "produk:newMaterial" %}?next={{ request.path|urlencode }}">Material</a>
+              </div>
+          </div>
+          </div>
+          {% endif %}
+
+          {% if request.user|has_group:"Admin" %}
+          <div class="btn-group">
+              <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{% url "produk:newVarian" %}?next={{ request.path|urlencode }}">Brand-Model-Varian</a>
+                  <a class="dropdown-item" href="{% url "produk:newMaterial" %}?next={{ request.path|urlencode }}">Material</a>
+              </div>
+          </div>
+          </div>
+          {% endif %}
+      </div>
+
+            <div class="card" style="margin-bottom:20px;">
+              <div class="card-body">
+                <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Varian</th>
+            <th>Atribut</th>
+            <th>Bill of Material</th>
+            {% if request.user|has_group:"Designer" %}
+            <th>Opsi</th>
+            {% endif %}
+            {% if request.user|has_group:"Admin" %}
+            <th>Opsi</th>
+            {% endif %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for b in varian %}
+        <tr>
+            <td>({{b.idBrand}}) {{b.namaBrand}}</td>
+            <td>({{b.idModel}}) {{b.namaModel}}</td>
+            <td>({{b.idVarian}}) {{b.namaVarian}}</td>
+            <td>{{b.namaAtribut}}: {{b.nilaiAtribut}}</td>
+            <td><a class="btn btn-success" href="{% url "produk:billOfMaterial" idVarianInput=b.idVarian %}">BOM <i class="fas fa-angle-double-right"></a></td>
+            {% if request.user|has_group:"Designer" %}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteVarian" b.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateVarian" b.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+            {% endif %}
+            {% if request.user|has_group:"Admin" %}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteVarian" b.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateVarian" b.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+    </div>
+{% endblock contents %}

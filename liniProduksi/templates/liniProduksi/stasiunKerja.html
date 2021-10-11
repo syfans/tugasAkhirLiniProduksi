@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+{% block pageTitle %}
+    {{Judul}}
+<!--    <br>-->
+<!--    {% for liniProduksi in liniProduksi %}-->
+<!--        <h6>ID Lini Produksi: {{liniProduksi.id}}</h6>-->
+<!--    {% endfor %}-->
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "liniProduksi:index" %}">Home</a></li>
+                {% for m in liniProduksi %}
+                <li class="breadcrumb-item active" aria-current="page">{{m.idLiniProduksi}}</li>
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container">
+<!--        <div class="input-group-prepend">-->
+<!--            <div class="input-group-text" style="height:50px;">-->
+<!--                <i class="fa fa-search" aria-hidden="true"></i>-->
+<!--            </div>-->
+<!--            <div class="input-group" style="width:97%;margin-left:auto;">-->
+<!--                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Cari ID Stasiun Kerja.." title="Ketik ID Stasiun Kerja">-->
+<!--            </div>-->
+<!--        </div>-->
+
+        {% if request.user|has_group:"Designer" %}
+        <div class="text-right" style="margin-bottom:20px;">
+            <div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top:8px;">
+                <a class="btn btn-primary" href="{% url "liniProduksi:newStasiunKerja" %}?next={{ request.path|urlencode }}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah Stasiun Kerja
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if request.user|has_group:"Admin" %}
+        <div class="text-right" style="margin-bottom:20px;">
+            <div class="btn-group" role="group" aria-label="Basic outlined example" style="margin-top:8px;">
+                <a class="btn btn-primary" href="{% url "liniProduksi:newStasiunKerja" %}?next={{ request.path|urlencode }}">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah Stasiun Kerja
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <table id="myTable" class="table table-hover" style="background-color:white; width:60%;margin-left:auto;margin-right:auto;">
+        <thead>
+        <tr>
+            <th scope="col">ID Stasiun Kerja</th>
+            <th scope="col">Nomor - Sisi</th>
+            <th scope="col">Detail</th>
+            {% if request.user|has_group:"Designer" %}
+            <th>Opsi</th>
+            {% endif %}
+            {% if request.user|has_group:"Admin" %}
+            <th>Opsi</th>
+            {% endif %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for sk in semua_stasiunKerja %}
+            <tr>
+                <td>{{sk.idStasiunKerja}}</td>
+                <td>{{sk.nomorStasiunKerja}} - {{sk.sisiStasiunKerja}}</td>
+                <td><a class="btn btn-success" href="{% url "liniProduksi:stasiunKerjaDetail" idLiniProduksiInput=sk.liniProduksi idStasiunKerjaInput=sk.idStasiunKerja %}">Detail <i class="fas fa-angle-double-right"></i></a></td>
+                {% if request.user|has_group:"Designer" %}
+                <td>
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "liniProduksi:deleteStasiunKerja" sk.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:updateStasiunKerja" sk.id %}?next={{ request.path|urlencode }}">Edit</a>
+                    </div>
+                </div>
+                </td>
+                {% endif %}
+
+                {% if request.user|has_group:"Admin" %}
+                <td>
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "liniProduksi:deleteStasiunKerja" sk.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:updateStasiunKerja" sk.id %}?next={{ request.path|urlencode }}">Edit</a>
+                    </div>
+                </div>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+
+        </table>
+
+    </div>
+
+    <script>
+        function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+        } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+    </script>
+{% endblock contents %}

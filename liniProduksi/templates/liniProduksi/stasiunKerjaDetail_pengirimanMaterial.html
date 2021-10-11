@@ -1,0 +1,66 @@
+{% load templatetags %}
+<div class="tab-pane fade" id="pengirimanMaterial" role="tabpanel" aria-labelledby="pengirimanMaterial-tab">
+
+            <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>ID Material</th>
+                <th>Jumlah Material Tiap Pengiriman</th>
+                {% if request.user|has_group:"Designer" %}
+            <th>Opsi</th>
+            {% endif %}
+
+            {% if request.user|has_group:"Admin" %}
+            <th>Opsi</th>
+                <th>Permintaan Material</th>
+            {% endif %}
+                {% if request.user|has_group:"Operator" %}
+                <th>Permintaan Material</th>
+                {% endif %}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for pm in pengirimanMaterial %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>[{{pm.kebutuhanMaterial.material.varian}}] {{pm.kebutuhanMaterial.material}}</td>
+                    <td>{{pm.jumlahMaterialTiapPengiriman}}</td>
+                    {% if request.user|has_group:"Designer" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deletePengirimanMaterial" pm.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updatePengirimanMaterial" pm.id %}?next={{ request.path|urlencode }}">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+
+                    {% if request.user|has_group:"Operator" %}
+                    <td>
+                        <a class="btn btn-primary" href="{% url "jadwal:permintaanMaterial" pm.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Permintaan Material</a>
+                    </td>
+                    {% endif %}
+
+                    {% if request.user|has_group:"Admin" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deletePengirimanMaterial" pm.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updatePengirimanMaterial" pm.id %}?next={{ request.path|urlencode }}">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="{% url "jadwal:permintaanMaterial" pm.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Permintaan Material</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>

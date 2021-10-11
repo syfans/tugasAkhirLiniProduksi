@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+        {% include "liniProduksi/snippets/stasiunKerjaDetail_breadcumb.html" %}
+        {% include "liniProduksi/snippets/stasiunKerjaDetail_informasiUmum.html" %}
+        <div class="text-right" style="margin-top:20px;">
+        <div class="dropup">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "liniProduksi:newProses" %}?next={{ request.path|urlencode }}">Proses</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:newOperator" %}?next={{ request.path|urlencode }}">Operator</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:newPeralatanProduksi" %}?next={{ request.path|urlencode }}">Peralatan Produksi</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:newKebutuhanMaterial" %}?next={{ request.path|urlencode }}">Kebutuhan Material</a>
+                        <a class="dropdown-item" href="{% url "liniProduksi:newPengirimanMaterial" %}?next={{ request.path|urlencode }}">Informasi Pengiriman Material</a>
+                        {% for sk in stasiunKerja %}
+                        <a class="dropdown-item" href="{% url "liniProduksi:gangguanSK" sk.idStasiunKerja %}">Gangguan</a>
+                        {% endfor %}
+                    </div>
+        </div>
+        </div>
+        <div class="card">
+            {% include "liniProduksi/snippets/stasiunKerjaDetail_card_nav.html" %}
+            <div class="card-body tab-content">
+                {% include "liniProduksi/stasiunKerjaDetail_operator.html" %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock contents %}

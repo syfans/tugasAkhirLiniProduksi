@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+        <div class="card">
+             <div class="card-header" style="background-color:#d3d9df;">
+                <ul class="nav nav-pills nav-fill" role="tablist" style="background-color:#d3d9df;">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="semua-tab" data-toggle="tab" href="#semua" role="tab" aria-controls="semua" aria-selected="false">Semua</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="belumSelesai-tab" data-toggle="tab" href="#belumSelesai" role="tab" aria-controls="belumSelesai" aria-selected="true">Belum Selesai</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="selesai-tab" data-toggle="tab" href="#selesai" role="tab" aria-controls="selesai" aria-selected="false">Selesai</a>
+                  </li>
+                </ul>
+             </div>
+            <div class="card-body tab-content">
+                {% include "liniProduksi/gangguanSemua.html" %}
+                {% include "liniProduksi/gangguanBelumSelesai.html" %}
+                {% include "liniProduksi/gangguanSudahSelesai.html" %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock contents %}

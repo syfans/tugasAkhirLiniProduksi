@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container">
+        <div class="card" style="margin-top:15px; margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-primary w-100" href="{% url "liniProduksi:index" %}">Lini Produksi</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:targetProduksi" %}">Target Produksi</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="text-right" style="margin-bottom:20px;">
+          <div class="btn-group">
+              <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{% url "liniProduksi:newLiniProduksi" %}">Lini Produksi</a>
+                  <a class="dropdown-item" href="{% url "liniProduksi:newTargetProduksi" %}">Target Produksi</a>
+              </div>
+          </div>
+          </div>
+      </div>
+                <table id="myTable" class="table table-hover text-center" style="background-color:white; margin-top:20px;">
+                    <thead>
+                    <tr>
+                        <th>ID Lini Produksi</th>
+                        <th>Waktu Produksi</th>
+                        <th>Waktu Siklus (s)</th>
+                        <th>Jumlah Stasiun Kerja</th>
+                        <th>List Stasiun Kerja</th>
+                        <th>Opsi</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for lp in liniProduksi %}
+                        <tr>
+                            <td>{{lp.idLiniProduksi}}</td>
+                            <td>{{lp.waktuMulaiProduksi|time:"H:i:s"}} s/d {{lp.waktuSelesaiProduksi|time:"H:i:s"}}</td>
+                            <td>{{lp.waktuSiklus}}</td>
+                            <td>{{lp.jumlahStasiunKerja}}</td>
+                            <td><a href="{% url "liniProduksi:stasiunKerja" idLiniProduksiInput=lp.idLiniProduksi %}">list</a></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="{% url "liniProduksi:deleteLiniProduksi" lp.id %}">Hapus</a>
+                                        <a class="dropdown-item" href="{% url "liniProduksi:updateLiniProduksi" lp.id %}">Edit</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock contents %}

@@ -1,0 +1,9 @@
+ <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "liniProduksi:index" %}">Home</a></li>
+                {% for m in stasiunKerja %}
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "liniProduksi:stasiunKerja" idLiniProduksiInput=m.liniProduksi %}">{{m.liniProduksi.idLiniProduksi}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{m.nomorStasiunKerja}} - {{m.sisiStasiunKerja}}</li>
+                {% endfor %}
+            </ol>
+        </nav>

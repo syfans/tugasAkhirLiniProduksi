@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block Title %}
+    Sistem Penjadwalan | {{Judul}}
+{% endblock Title %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container">
+        <div class="card" style="margin-top:15px; margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:index" %}">Semua Jadwal</a>
+                    <a type="button" class="btn btn-primary w-100" href="{% url "jadwal:belumKonfirmasi" %}">Belum Konfirmasi</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:sudahKonfirmasi" %}">Sudah Konfirmasi</a>
+                </div>
+            </div>
+
+            <div class="card-header text-center">
+                <a class="btn btn-success" href="{% url "jadwal:belumKonfirmasi" %}">Semua</a>
+                {% for sk in sk %}
+                <a class="btn btn-warning" href="{% url "jadwal:belumKonfirmasi_SK" sk.idStasiunKerja %}">{{sk.idStasiunKerja}}</a>
+                {% endfor %}
+            </div>
+
+            <div class="card-body">
+                <table id="myTable" class="table table-hover text-center" style="background-color:white; margin-top:20px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID Stasiun Kerja</th>
+                        <th scope="col">ID Material</th>
+                        <th scope="col">Jumlah Material</th>
+                        <th scope="col">Tanggal (dd/mm/yyyy)</th>
+                        <th scope="col">Waktu Kedatangan</th>
+                        {% if request.user|has_group:"Staf gudang" %}
+                        <th scope="col">Konfirmasi Material Sampai</th>
+                        {% endif %}
+                        {% if request.user|has_group:"Admin" %}
+                        <th scope="col">Konfirmasi Material Sampai</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for jk in jadwal_Konfirmasi %}
+                    <tr>
+                        <td>{{jk.kebutuhanMaterial.stasiunKerja}}</td>
+                        <td>[{{jk.kebutuhanMaterial.material.varian}}] {{jk.kebutuhanMaterial.material}}</td>
+                        <td>{{jk.jumlah_material}}</td>
+                        <td>{{jk.tanggal|date:"d/m/Y"}}</td>
+                        <td>{{jk.jadwalKedatangan|time:"H:i:s"}}</td>
+                        {% if request.user|has_group:"Staf gudang" %}
+                        <td>
+                            <a class="btn btn-secondary" href="{% url "jadwal:konfirmasi" jk.id %}">></a>
+                        </td>
+                        {% endif %}
+                        {% if request.user|has_group:"Admin" %}
+                        <td>
+                            <a class="btn btn-secondary" href="{% url "jadwal:konfirmasi" jk.id %}">></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock contents %}

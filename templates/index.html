@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type='text/css' href="static/css/styles_index.css">
+{% endblock css %}
+
+{% block Title %}
+    Sistem Penjadwalan | {{Judul}}
+{% endblock Title %}
+
+
+{% block pageTitle %}
+    <div class="container text-center" style="margin-top:75px;">
+        {{Judul}}
+    </div>
+{% endblock pageTitle %}
+
+
+{% block contents %}
+
+    <div class="container" style="margin-top:20px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <img src="static/img/dataLiniProduksi.png" class="card-img-top" alt="produk">
+                    <div class="card-body">
+                        <a href="{% url "liniProduksi:index" %}" class="btn">>>></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col md-6">
+                <div class="card text-center">
+                    <img src="static/img/produk.png" class="card-img-top" alt="produk">
+                    <div class="card-body">
+                        <a href="{% url "produk:index" %}" class="btn">>>></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            <div class="row" style="margin-bottom:20px;">
+                <div class="col md-6">
+                    <div class="card text-center">
+                        <img src="static/img/jadwalKM.png" class="card-img-top" alt="jadwal">
+                        <div class="card-body">
+                            <a href="{% url "jadwal:index" %}" class="btn">>>></a>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <img src="static/img/gangguanSK.png" class="card-img-top" alt="jadwal">
+                    <div class="card-body">
+                        <a href="{% url "liniProduksi:gangguan" %}" class="btn">>>></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock contents %}
+

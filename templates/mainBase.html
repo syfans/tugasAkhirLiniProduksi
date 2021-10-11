@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+    <style>
+/* unvisited link */
+.btn {
+    width:100%;
+    color: #343a40;
+    background-color:#bae5dd;
+}
+
+.btn:hover {
+  background-color: #343a40;
+  color: #bae5dd;
+}
+
+</style>
+
+    <link rel="shortcut icon" href="{% static 'img/adims1.png' type='image/x-icon' %}">
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+    <title>
+        {% block Title %}
+
+        {% endblock Title %}
+    </title>
+
+    {% include "snippets/styles.html" %}
+
+</head>
+<body style="background-color: #f5f5f5;">
+    {% include "snippets/mainNavbar.html" %}
+    <div style="position:relative; min-height:100vh;">
+        <div style="padding-bottom:40px;">
+        <div class="container" style="margin-top:70px">
+            <h1>
+            {% block pageTitle %}
+
+            {% endblock pageTitle %}
+            </h1>
+        </div>
+
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block contents %}
+
+            {% endblock contents %}
+        </div>
+        </div>
+        {% include "mainFooter.html" %}
+    </div>
+
+    {% include "snippets/scripts.html" %}
+</body>
+</html>
+
+

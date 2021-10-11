@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+        .card2 {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            background-color:#f5f5f5;
+        }
+.card2 {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            background-color:#f5f5f5;
+            border-color: #d3d9df;
+            border-style: solid;
+            margin-top:20px;
+        }
+
+        .card2:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            background-color: #d3d9df;
+            border-color: #f5f5f5;
+            border-style: solid;
+        }
+
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+
+    {% if request.user|has_group:"Staf produksi" %}
+        <div class="text-right" style="margin-bottom:20px;">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetTahunan" %}">Target Tahunan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetBulanan" %}">Target Bulanan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetMingguan" %}">Target Mingguan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newProduksiHarian" %}">Produksi Harian</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newHariLibur" %}">Hari Libur</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newIstirahatNormal" %}">Waktu Istirahat Normal</a>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+
+        {% if request.user|has_group:"Admin" %}
+        <div class="text-right" style="margin-bottom:20px;">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetTahunan" %}">Target Tahunan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetBulanan" %}">Target Bulanan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetMingguan" %}">Target Mingguan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newProduksiHarian" %}">Produksi Harian</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newHariLibur" %}">Hari Libur</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newIstirahatNormal" %}">Waktu Istirahat Normal</a>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <div class="card" style="margin-top:15px; margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-primary w-100" href="{% url "liniProduksi:produksiHarian" %}">Sekarang</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:harian" %}">Harian</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:mingguan" %}">Mingguan</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:bulanan" %}">Bulanan</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:tahunan" %}">Tahunan</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                {% for lp in produksiHarian %}
+                <div class="card2" style="width:98%;margin-bottom:20px;margin-left:1%;">
+                    <div class="row"></div>
+                    <div class="row" style="margin-top:10px; margin-bottom:10px; margin-left:0px; width:100%;">
+                    <div class="col-md-2 my-auto" align="center" >
+                        <h6><b><u>ID Lini Produksi</u></b></h6>
+                        <h1>{{lp.liniProduksi.idLiniProduksi}}</h1>
+                    </div>
+                    <div class="col-md-4 my-auto border-left border-right border-dark" align="center">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Waktu Siklus</th>
+                                <td>{{lp.liniProduksi.waktuSiklus}} detik</td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Produksi</th>
+                                <td>{{lp.tanggalProduksi|date:"d-m-Y"}}</td>
+                            </tr>
+                            <tr>
+                                <th>Downtime</th>
+                                <td>{{lp.downtime}} detik</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4 my-auto" align="center">
+                        <table class="table text-center">
+                            <thead>
+                            <th>Varian</th>
+                            <th>Target</th>
+                            <th>Capaian</th>
+                            <th>Persentase Capaian</th>
+                            {% if request.user|has_group:"Operator" %}
+                            <th>Tambah Capaian</th>
+                            {% endif %}
+                            {% if request.user|has_group:"Admin" %}
+                            <th>Tambah Capaian</th>
+                            {% endif %}
+                            </thead>
+                            {% for t in target %}
+                            {% if t.produksiHarian_id == lp.id %}
+                            <tbody>
+                            <td>{{t.varian}}</td>
+                            <td>{{t.target}}</td>
+                            <td>{{t.capaian}}</td>
+                            <td>{% widthratio t.capaian t.target 100 %} %</td>
+                            {% if request.user|has_group:"Operator" %}
+                            <td>
+                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                              <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <a class="btn btn-success" href="{% url "liniProduksi:tambahCapaian" id=t.id  %}"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    <a class="btn btn-warning" href="{% url "liniProduksi:tambahCapaian" id=t.id  %}"> +1</a>
+                              </div>
+                        </div>
+                            </td>
+                            {% endif %}
+                            {% if request.user|has_group:"Admin" %}
+                            <td>
+                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                              <div class="btn-group mr-2" role="group" aria-label="First group">
+                                    <a class="btn btn-success" href="{% url "liniProduksi:tambahCapaian" id=t.id  %}"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    <a class="btn btn-warning" href="{% url "liniProduksi:tambahCapaian" id=t.id  %}"> +1</a>
+                              </div>
+                        </div>
+                            </td>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+                    <div class="row border-top border-dark" style="margin-top:10px; margin-bottom:10px; margin-left:0px; width:100%;"></div>
+
+                    <div class="row" style="margin-top:10px; margin-bottom:10px; margin-left:0px; width:100%;">
+                        <div class="col-md-8 my-auto" align="center">
+                        <table class="table text-center">
+                            <thead>
+                            <th>Varian</th>
+                            <th>Waktu Rencana</th>
+                            <th>Waktu Aktual</th>
+                            </thead>
+                            {% for t in target %}
+                            {% if t.produksiHarian_id == lp.id %}
+                            <tbody>
+                            <td>{{t.varian}}</td>
+                            <td>{{t.waktuMulaiProduksi|time:"H:i:s"}} s/d {{t.waktuSelesaiProduksi|time:"H:i:s"}}</td>
+                            <td>{{t.waktuMulaiProduksiAktual|time:"H:i:s"}} s/d {{t.waktuSelesaiProduksiAktual|time:"H:i:s"}}</td>
+                            </tbody>
+                            {% endif %}
+                            {% endfor %}
+                            <td>Seluruh</td>
+                            <td>{{lp.waktuMulaiProduksi|time:"H:i:s"}} s/d {{lp.waktuSelesaiProduksi|time:"H:i:s"}}</td>
+                            <td>{{lp.waktuMulaiProduksiAktual|time:"H:i:s"}} s/d {{lp.waktuSelesaiProduksiAktual|time:"H:i:s"}}</td>
+                        </table>
+                    </div>
+
+                        <div class="col-md-4 my-auto border-left border-dark" align="center">
+                            <table class="table table-hover text-center" style="width:60%;">
+                            <thead>
+                            <tr>
+                                <th>Waktu Istirahat</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for i in istirahat %}
+                                    {% if lp.id == i.produksiHarian_id %}
+                                <tr>
+                                    <td>{{i.waktuMulaiIstirahat|time:"H:i:s"}} s/d {{i.waktuSelesaiIstirahat|time:"H:i:s"}}</td>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    </div>
+
+                    <div class="row"></div>
+
+                </div>
+
+    {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock contents %}

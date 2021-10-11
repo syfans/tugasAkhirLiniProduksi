@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<style>
+    td {
+        vertical-align: center;
+    }
+</style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <div class="container" style="margin-top:13px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container">
+      <div class="text-right" style="margin-bottom:20px;">
+          <div class="btn-group">
+              <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{% url "produk:newBrand" %}">Brand</a>
+                  <a class="dropdown-item" href="{% url "produk:newModel" %}">Model</a>
+                  <a class="dropdown-item" href="{% url "produk:newVarian" %}">Varian</a>
+              </div>
+          </div>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="column" style="margin-left:15px; width:30%;">
+            <div class="card">
+              <div class="card-body">
+                <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Brand</th>
+            <th>Nama Brand</th>
+            <th>Model</th>
+            <th>Opsi</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for b in brand %}
+        <tr>
+            <td>{{b.id}}</td>
+            <td>{{b.namaBrand}}</td>
+            <td><a href="{% url "produk:model" idBrandInput=b.id %}">model</a></td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteBrand" b.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateBrand" b.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+        </div>
+<!--        <div class="column" style="width:30%; margin-left:5%; margin-right:5%;">-->
+<!--            <div class="card">-->
+<!--              <div class="card-body">-->
+<!--                <h5 class="card-title">Card title</h5>-->
+<!--                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+<!--                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="column" style="width:30%;">-->
+<!--            <div class="card">-->
+<!--              <div class="card-body">-->
+<!--                <h5 class="card-title">Card title</h5>-->
+<!--                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+<!--                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+    </div>
+{% endblock contents %}

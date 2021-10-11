@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<style>
+    td {
+        vertical-align: center;
+    }
+</style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "produk:index" %}">Home</a></li>
+                {% for m in varian_p %}
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "produk:model" idBrandInput=m.brand %}">{{m.brand.namaBrand}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{m.model.namaModel}}</li>
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+      <div class="text-right" style="margin-bottom:20px;">
+          <div class="btn-group">
+              <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{% url "produk:newBrand" %}">Brand</a>
+                  <a class="dropdown-item" href="{% url "produk:newModel" %}">Model</a>
+                  <a class="dropdown-item" href="{% url "produk:newVarian" %}">Varian</a>
+              </div>
+          </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="column" style="margin-left:1.5%; width:30%;">
+            <div class="card">
+              <div class="card-body">
+                <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Brand</th>
+            <th>Nama Brand</th>
+            <th>Model</th>
+            <th>Opsi</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for b in brand %}
+        <tr>
+            <td>{{b.id}}</td>
+            <td>{{b.namaBrand}}</td>
+            <td><a href="{% url "produk:model" idBrandInput=b.id %}">detail</a></td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteBrand" b.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateBrand" b.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+        </div>
+
+        <div class="column" style="width:30%; margin-left:3.5%; margin-right:3.5%;">
+            <div class="card">
+              <div class="card-body">
+                  {% for m in list_brand %}
+                  <h5>Brand: {{m.id}}</h5>
+                  {% endfor %}
+
+                  <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Model</th>
+            <th>Nama Model</th>
+            <th>Varian</th>
+            <th>Opsi</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for m in model_p %}
+        <tr>
+            <td>{{m.id}}</td>
+            <td>{{m.namaModel}}</td>
+            <td><a href="{% url "produk:varian" idBrandInput=m.brand_id idModelInput=m.id %}">detail</a></td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteModel" m.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateModel" m.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+        </div>
+
+        <div class="column" style="margin-right:1.5%; width:30%;">
+            <div class="card">
+              <div class="card-body">
+                {% for m in list_model %}
+                  <h5>Model: {{m.id}}</h5>
+                  {% endfor %}
+
+                  <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Varian</th>
+            <th>Nama Varian</th>
+            <th>Lini Produksi</th>
+            <th>Opsi</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for m in varian_p %}
+        <tr>
+            <td>{{m.id}}</td>
+            <td>{{m.namaVarian}}</td>
+            <td><a href="{% url "produk:liniProduksi" idBrandInput=m.brand_id idModelInput=m.model_id idVarianInput=m.id %}">detail</a></td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url "produk:deleteVarian" m.id %}">Hapus</a>
+                        <a class="dropdown-item" href="{% url "produk:updateVarian" m.id %}">Edit</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock contents %}

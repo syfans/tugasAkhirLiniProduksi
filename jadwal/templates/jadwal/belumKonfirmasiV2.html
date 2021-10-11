@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block Title %}
+    Sistem Penjadwalan | {{Judul}}
+{% endblock Title %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container">
+        <div class="card" style="margin-top:15px; margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:index" %}">Semua Jadwal</a>
+                    <a type="button" class="btn btn-primary w-100" href="{% url "jadwal:sudahKonfirmasi" %}">Belum Konfirmasi</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:sudahKonfirmasi" %}">Sudah Konfirmasi</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table id="myTable" class="table table-hover text-center" style="background-color:white; margin-top:20px;">
+                    <thead>
+                    <tr>
+<!--                        <th scope="col">#</th>-->
+                        <th scope="col">ID Lini Produksi</th>
+                        <th scope="col">ID Stasiun Kerja</th>
+                        <th scope="col">ID Material</th>
+                        <th scope="col">Jumlah Material</th>
+                        <th scope="col">Tanggal Produksi (dd/mm/yyyy)</th>
+                        <th scope="col">Waktu Material Dibutuhkan</th>
+                        <th scope="col">Konfirmasi</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for j in jadwal_Konfirmasi %}
+                    {% for jk in j.jadwalSudahKonfirmasi.all %}
+                    {% if jk.is_terkirim == False %}
+                    <tr>
+<!--                        <td>{{forloop.parentloop.counter}}</td>-->
+                        <td>{{jk.jadwal.liniProduksi_id}}</td>
+                        <td>{{jk.jadwal.stasiunKerja_id}}</td>
+                        <td>[{{jadwal.kebutuhanMaterial.material.varian}}] {{jk.jadwal.material}}</td>
+                        <td>{{jk.jadwal.jumlah_material}}</td>
+                        <td>{{jk.jadwal.tanggal|date:"d/m/Y"}}</td>
+                        <td>{{jk.jadwal.jadwal|time:"H:i:s"}}</td>
+                        <td>
+                            <a class="btn btn-secondary" href="{% url "jadwal:konfirmasi" jk.jadwal.id %}">></a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock contents %}

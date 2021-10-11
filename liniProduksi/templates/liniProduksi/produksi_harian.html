@@ -1,0 +1,489 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+        .card2 {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            background-color:#f5f5f5;
+        }
+
+        .card2:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            background-color: #d3d9df;
+        }
+
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container" style="margin-bottom:20px;margin-top:13px;">
+    <div class="text-right" style="margin-bottom:20px;">
+        <div class="dropdown">
+            {% if request.user|has_group:"Staf produksi" %}
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetTahunan" %}">Target Tahunan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetBulanan" %}">Target Bulanan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetMingguan" %}">Target Mingguan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newProduksiHarian" %}">Produksi Harian</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newHariLibur" %}">Hari Libur</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newIstirahatNormal" %}">Waktu Istirahat Normal</a>
+            </div>
+            {% endif %}
+            {% if request.user|has_group:"Admin" %}
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetTahunan" %}">Target Tahunan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetBulanan" %}">Target Bulanan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newTargetMingguan" %}">Target Mingguan</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newProduksiHarian" %}">Produksi Harian</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newHariLibur" %}">Hari Libur</a>
+                <a class="dropdown-item" href="{% url "liniProduksi:newIstirahatNormal" %}">Waktu Istirahat Normal</a>
+            </div>
+            {% endif %}
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
+        </div>
+        <!-- Button trigger modal -->
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Waktu Istirahat Normal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <table class="table text-center">
+                    <thead>
+                    <th>Waktu</th>
+                    {% if request.user|has_group:"Staf produksi" %}
+                    <th>Opsi</th>
+                    {% endif %}
+                    {% if request.user|has_group:"Admin" %}
+                    <th>Opsi</th>
+                    {% endif %}
+                    </thead>
+                    {% for i in istirahat %}
+                    {% if i.produksiHarian == None %}
+                    <tbody>
+                    <td>{{i.waktuMulaiIstirahat|time:"H:i:s"}} s/d {{i.waktuSelesaiIstirahat|time:"H:i:s"}}</td>
+                    {% if request.user|has_group:"Staf produksi" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deleteWaktuIstirahat" i.id %}">Hapus waktu istirahat</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updateWaktuIstirahat" i.id %}">Edit waktu istirahat</a>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+                    {% if request.user|has_group:"Admin" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deleteWaktuIstirahat" i.id %}">Hapus waktu istirahat</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updateWaktuIstirahat" i.id %}">Edit waktu istirahat</a>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+                    </tbody>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="container">
+        <div class="card" style="margin-top:15px; margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:produksiHarian" %}">Sekarang</a>
+                    <a type="button" class="btn btn-primary w-100" href="{% url "liniProduksi:harian" %}">Harian</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:mingguan" %}">Mingguan</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:bulanan" %}">Bulanan</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "liniProduksi:tahunan" %}">Tahunan</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table text-center table-hover">
+                    <thead>
+                    <th>ID Lini Produksi</th>
+                    <th>Tanggal</th>
+                    <th>Target</th>
+                    <th>Capaian</th>
+                    <th>Persentase Capaian</th>
+                    <th>Detail</th>
+                    {% if request.user|has_group:"Staf produksi" %}
+                    <th>Opsi</th>
+                    {% endif %}
+                    {% if request.user|has_group:"Admin" %}
+                    <th>Opsi</th>
+                    {% endif %}
+                    </thead>
+                    {% for lp in produksiHarian %}
+                    <tbody>
+                    <td>{{lp.liniProduksi.idLiniProduksi}}</td>
+                    <td>{{lp.tanggalProduksi|date:"d-m-Y"}}</td>
+                    <td>
+                        {% for t in target %}
+                        {% if t.produksiHarian_id == lp.id %}
+                        [{{t.varian}}] {{t.target}} <br>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for t in target %}
+                        {% if t.produksiHarian_id == lp.id %}
+                        [{{t.varian}}] {{t.capaian}} <br>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for t in target %}
+                        {% if t.produksiHarian_id == lp.id %}
+                        [{{t.varian}}] {% widthratio t.capaian t.target 100 %} % <br>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+
+                    {% if lp.is_libur == "Tidak libur" %}
+                    <td>
+                        <button type="button" class="btn btn-success" style="width:100%;" data-toggle="modal" data-target="#exampleModalLong{{lp.id}}">
+                              Produksi <i class="fas fa-angle-double-right"></i>
+                        </button>
+                                <!-- Modal -->
+                            <div class="modal fade" id="exampleModalLong{{lp.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle{{lp.id}}" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Produksi</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div class="row border-bottom border-top border-dark">
+                                          <div class="col-md-9 text-left">
+                                              <h4>Keseluruhan</h4>
+                                          </div>
+                                          <div class="col-md-3">
+                                              {% if request.user|has_group:"Staf produksi" %}
+                                              <div class="text-right">
+                                                 {% if lp.is_libur == "Tidak libur" %}
+                                                  {% if lp.kondisiIstirahat == "Customize" %}
+                                                  {% if lp.tanggalProduksi >= today.date %}
+                                                  <a class="btn btn-primary" style="width:100%;" href="{% url "liniProduksi:newWaktuIstirahat" lp.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Istirahat</a>
+                                                  {% endif %}
+                                                  {% endif %}
+                                                  {% endif %}
+                                              </div>
+                                              {% endif %}
+                                              {% if request.user|has_group:"Admin" %}
+                                              <div class="text-right">
+                                                 {% if lp.is_libur == "Tidak libur" %}
+                                                  {% if lp.kondisiIstirahat == "Customize" %}
+                                                  {% if lp.tanggalProduksi >= today.date %}
+                                                  <a class="btn btn-primary" style="width:100%;" href="{% url "liniProduksi:newWaktuIstirahat" lp.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Istirahat</a>
+                                                  {% endif %}
+                                                  {% endif %}
+                                                  {% endif %}
+                                              </div>
+                                              {% endif %}
+                                          </div>
+                                      </div>
+                                      <table class="table table-borderless">
+                                          <tr>
+                                              <th>ID Lini Produksi</th>
+                                              <td>{{lp.liniProduksi.idLiniProduksi}}</td>
+                                          </tr>
+                                          <tr>
+                                              <th>Waktu siklus</th>
+                                              <td>{{lp.liniProduksi.waktuSiklus}} detik</td>
+                                          </tr>
+                                          <tr>
+                                              <th>Tanggal Produksi</th>
+                                              <td>{{lp.tanggalProduksi|date:"d-m-Y"}}</td>
+                                          </tr>
+                                          <tr>
+                                              <th>Waktu Produksi</th>
+                                              <td>
+                                                  {% if lp.waktuMulaiProduksi != None %}
+                                                  {{lp.waktuMulaiProduksi|time:"H:i:s"}} s/d {{lp.waktuSelesaiProduksi|time:"H:i:s"}}
+                                                  {% endif %}
+                                              </td>
+                                          </tr>
+                                          <tr>
+                                              <th>Waktu Istirahat</th>
+                                              <td>
+                                                  <div class="row">
+                                                      <div class="col-md-7">
+                                                          <table class="table table-sm table-borderless">
+                                                      {% for i in istirahat %}
+                                                      {% if lp.id == i.produksiHarian_id %}
+                                                      <tr>
+                                                          <td>
+                                                              {{i.waktuMulaiIstirahat|time:"H:i:s"}} s/d {{i.waktuSelesaiIstirahat|time:"H:i:s"}}
+                                                          </td>
+                                                          {% if request.user|has_group:"Staf produksi" %}
+                                                          <td>
+                                                              {% if i.kondisi != "Normal" %}
+                                                              {% if lp.tanggalProduksi >= today.date %}
+                                                              <div class="dropdown">
+                                                                  <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                      <a class="dropdown-item" href="{% url "liniProduksi:deleteWaktuIstirahat" i.id %}">Hapus waktu istirahat</a>
+                                                                      <a class="dropdown-item" href="{% url "liniProduksi:updateWaktuIstirahat" i.id %}">Edit waktu istirahat</a>
+                                                                  </div>
+                                                              </div>
+                                                              {% endif %}
+                                                              {% endif %}
+                                                          </td>
+                                                          {% endif %}
+                                                          {% if request.user|has_group:"Admin" %}
+                                                          <td>
+                                                              {% if i.kondisi != "Normal" %}
+                                                              {% if lp.tanggalProduksi >= today.date %}
+                                                              <div class="dropdown">
+                                                                  <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                      <a class="dropdown-item" href="{% url "liniProduksi:deleteWaktuIstirahat" i.id %}">Hapus waktu istirahat</a>
+                                                                      <a class="dropdown-item" href="{% url "liniProduksi:updateWaktuIstirahat" i.id %}">Edit waktu istirahat</a>
+                                                                  </div>
+                                                              </div>
+                                                              {% endif %}
+                                                              {% endif %}
+                                                          </td>
+                                                          {% endif %}
+                                                      </tr>
+                                                      {% endif %}
+                                                      {% endfor %}
+                                                  </table>
+                                                      </div>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                          <tr>
+                                              <th>Waktu Produksi Aktual</th>
+                                              <td>
+                                                  {% if lp.waktuMulaiProduksi != None %}
+                                                  {{lp.waktuMulaiProduksiAktual|time:"H:i:s"}} s/d {{lp.waktuSelesaiProduksiAktual|time:"H:i:s"}}
+                                                  {% endif %}
+                                              </td>
+                                          </tr>
+                                          <tr>
+                                              <th>Downtime</th>
+                                              <td>{{lp.downtime}} detik</td>
+                                          </tr>
+                                      </table>
+
+                                      <div class="row border-bottom border-top border-dark">
+                                          <div class="col-md-9 text-left">
+                                              <h4>Berdasarkan Varian</h4>
+                                          </div>
+                                          <div class="col-md-3">
+                                              {% if request.user|has_group:"Staf produksi" %}
+                                              <div class="text-right">
+                                                  {% if lp.tanggalProduksi >= today.date %}
+                                                    <a class="btn btn-primary" style="width:100%;" href="{% url "liniProduksi:newTargetHarian" lp.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Target</a>
+                                                  {% endif %}
+                                              </div>
+                                              {% endif %}
+                                              {% if request.user|has_group:"Admin" %}
+                                              <div class="text-right">
+                                                  {% if lp.tanggalProduksi >= today.date %}
+                                                    <a class="btn btn-primary" style="width:100%;" href="{% url "liniProduksi:newTargetHarian" lp.id %}"><i class="fa fa-plus" aria-hidden="true"></i> Target</a>
+                                                  {% endif %}
+                                              </div>
+                                              {% endif %}
+                                          </div>
+                                      </div>
+
+                                      <table class="table text-center">
+                                          <thead>
+                                          <th>Varian</th>
+                                          <th>Waktu Produksi</th>
+                                          <th>Waktu Produksi Aktual</th>
+                                          </thead>
+
+                                          {% for t in target %}
+                                          {% if t.produksiHarian_id == lp.id %}
+                                          <tbody>
+                                          <td>{{t.varian}}</td>
+                                          <td>{{t.waktuMulaiProduksi|time:"H:i:s"}} s/d {{t.waktuSelesaiProduksi|time:"H:i:s"}}</td>
+                                          <td>{{t.waktuMulaiProduksiAktual|time:"H:i:s"}} s/d {{t.waktuSelesaiProduksiAktual|time:"H:i:s"}}</td>
+                                          </tbody>
+                                          {% endif %}
+                                          {% endfor %}
+                                      </table>
+                                      <table class="table text-center">
+                                          <thead>
+                                          <th>Varian</th>
+                                          <th>Target</th>
+                                          <th>Capaian</th>
+                                          <th>% Capaian/Target</th>
+                                          {% if request.user|has_group:"Staf produksi" %}
+                                          <th>Opsi</th>
+                                          {% endif %}
+                                          {% if request.user|has_group:"Admin" %}
+                                          <th>Opsi</th>
+                                          {% endif %}
+                                          </thead>
+
+                                          {% for t in target %}
+                                          {% if t.produksiHarian_id == lp.id %}
+                                          <tbody>
+                                          <td>{{t.varian}}</td>
+                                          <td>{{t.target}}</td>
+                                          <td>{{t.capaian}}</td>
+                                          <td>{% widthratio t.capaian t.target 100 %} %</td>
+                                          {% if request.user|has_group:"Staf produksi" %}
+                                          <td>
+                                              {% if lp.tanggalProduksi >= today.date %}
+                                              <div class="dropdown">
+                                                  <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                      <a class="dropdown-item" href="{% url "liniProduksi:deleteTargetHarian" t.id %}">Hapus target harian</a>
+                                                      <a class="dropdown-item" href="{% url "liniProduksi:updateTargetHarian" t.id %}">Edit target harian</a>
+                                                  </div>
+                                              </div>
+                                              {% endif %}
+                                          </td>
+                                          {% endif %}
+                                          {% if request.user|has_group:"Admin" %}
+                                          <td>
+                                              {% if lp.tanggalProduksi >= today.date %}
+                                              <div class="dropdown">
+                                                  <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                      <a class="dropdown-item" href="{% url "liniProduksi:deleteTargetHarian" t.id %}">Hapus target harian</a>
+                                                      <a class="dropdown-item" href="{% url "liniProduksi:updateTargetHarian" t.id %}">Edit target harian</a>
+                                                  </div>
+                                              </div>
+                                              {% endif %}
+                                          </td>
+                                          {% endif %}
+                                          </tbody>
+                                          {% endif %}
+                                          {% endfor %}
+                                      </table>
+
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                    </td>
+                    {% endif %}
+
+                    {% if lp.is_libur == "Libur" %}
+                    <td>
+                        <button type="button" class="btn btn-danger" style="width:100%;" data-toggle="modal" data-target="#exampleModalLong{{lp.id}}">
+                              Libur <i class="fas fa-angle-double-right"></i>
+                        </button>
+                                <!-- Modal -->
+                            <div class="modal fade" id="exampleModalLong{{lp.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle{{lp.id}}" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Alasan Libur</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      {{lp.alasanLibur}}
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                    </td>
+                    {% endif %}
+
+                    {% if request.user|has_group:"Staf produksi" %}
+                    <td>
+                        {% if lp.tanggalProduksi >= today.date %}
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{% url "liniProduksi:deleteProduksiHarian" lp.id %}">Hapus</a>
+                                    <a class="dropdown-item" href="{% url "liniProduksi:updateProduksiHarian" lp.id %}">Edit</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+
+                    {% if request.user|has_group:"Admin" %}
+                    <td>
+                        {% if lp.tanggalProduksi >= today.date %}
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{% url "liniProduksi:deleteProduksiHarian" lp.id %}">Hapus</a>
+                                    <a class="dropdown-item" href="{% url "liniProduksi:updateProduksiHarian" lp.id %}">Edit</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock contents %}

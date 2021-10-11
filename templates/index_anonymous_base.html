@@ -1,0 +1,23 @@
+{% extends "base_anonymous.html" %}
+{% load static %}
+
+
+{% block Title %}
+    Login/Register ADiMS
+{% endblock Title %}
+
+
+{% block pageTitle %}
+
+{% endblock pageTitle %}
+
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="static/css/styles.css">
+<div class="container">
+    <img src="static/img/anonPage1.png" class="img-fluid" alt="Responsive image" style="margin-top:5px;">
+    <a class="btn2 text-center" href="{% url "users:login" %}">Login <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+
+</div>
+{% endblock contents %}
+

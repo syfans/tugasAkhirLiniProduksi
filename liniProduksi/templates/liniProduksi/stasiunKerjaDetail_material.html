@@ -1,0 +1,89 @@
+{% load templatetags %}
+<div class="tab-pane fade" id="kebutuhanMaterial" role="tabpanel" aria-labelledby="kebutuhanMaterial-tab">
+        <div class="row">
+
+            <div class="col-md-7">
+                <h4>Kebutuhan Material</h4>
+                <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>ID Proses</th>
+                <th>Material</th>
+                <th>Jumlah Material / Cycle Time</th>
+                <th>Jumlah Material Tersedia</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for km in km %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{km.proses}}</td>
+                    <td>[{{km.material__varian}}] {{km.material__idMaterial}}</td>
+                    <td>{{km.jumlahKumulatif}}</td>
+                    <td>{{km.jumlahMaterialKumulatif}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+            <div class="col-md-5">
+                <h4>Rincian Material</h4>
+                <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>ID Proses</th>
+                <th>Material</th>
+                <th>Nama Supplier</th>
+                {% if request.user|has_group:"Designer" %}
+            <th>Opsi</th>
+            {% endif %}
+
+            {% if request.user|has_group:"Admin" %}
+            <th>Opsi</th>
+            {% endif %}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for material in material %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{material.proses}}</td>
+                    <td>({{material.material.idMaterial}}) {{material.material.namaMaterial}}</td>
+                    <td>{{material.material.namaSupplier}}</td>
+                    {% if request.user|has_group:"Designer" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deleteMaterial" material.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updateMaterial" material.id %}?next={{ request.path|urlencode }}">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+
+                    {% if request.user|has_group:"Admin" %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url "liniProduksi:deleteMaterial" material.id %}?next={{ request.path|urlencode }}">Hapus</a>
+                                <a class="dropdown-item" href="{% url "liniProduksi:updateMaterial" material.id %}?next={{ request.path|urlencode }}">Edit</a>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+        </div>
+
+            </div>

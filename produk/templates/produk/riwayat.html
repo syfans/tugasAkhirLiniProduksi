@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <style>
+        .card2 {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            background-color:white;
+            border-color: #d3d9df;
+            border-style: solid;
+            margin-top:20px;
+            margin-bottom: 20px;
+        }
+        th {
+            width:30%;
+        }
+
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    <h1>{{Judul}}</h1>
+{% endblock pageTitle %}
+
+{% block contents %}
+    <div class="container">
+        <div class="card2">
+            <div class="card-body">
+                <h4>Material Sebelum</h4>
+                {% for m in material_riwayat %}
+                    {% for n in mat_semua %}
+                        {% if m.penggantiMaterial_id == n.id %}
+                <table class="table">
+                    <tr>
+                        <th> ID Engineering Order</th>
+                        {% for eo in eo %}
+                        {% if eo.material.id == n.id %}
+                        <td>{{eo.idEO}}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>ID Material</th>
+                        <td>{{n.idMaterial}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama Material</th>
+                        <td>{{n.namaMaterial}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama Supplier</th>
+                        <td>{{n.namaSupplier}}</td>
+                    </tr>
+                    <tr>
+                        <th>Penyusun Produk</th>
+                        <td>{{n.penyusunProduk.idMaterial}}</td>
+                    </tr>
+                    <tr>
+                        <th>Alasan Pergantian</th>
+                        <td>{{n.keterangan}}</td>
+                    </tr>
+                    <tr>
+                        <th>Tanggal Mulai Berlaku</th>
+                        <td>{{n.tanggalMulaiBerlaku|date:"d-m-Y"}}</td>
+                    </tr>
+                    <tr>
+                        <th>Tanggal Selesai Berlaku</th>
+                        <td>{{n.tanggalGanti|date:"d-m-Y"}}</td>
+                    </tr>
+                </table>
+
+                <div class="text-right">
+                  <a class="btn btn-primary" href="{% url "produk:riwayatMaterial" n.id %}">Riwayat</a>
+                </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock contents %}

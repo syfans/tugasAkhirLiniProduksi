@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% load templatetags %}
+
+{% block css %}
+    <style>
+        #tb2 tr, th, td {
+            border:hidden;
+        }
+
+        table {
+            background-color:white;
+            margin:auto;
+            width:60%;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock css %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+<div class="container" style="margin-top:13px;">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for m in matVar %}
+                    <li class="breadcrumb-item" aria-current="page"><a href="{% url "produk:index" %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{m.varian}}</li>
+                    {% endfor %}
+                </ol>
+            </nav>
+    <div class="text-right" style="margin-bottom:20px;">
+        {% if request.user|has_group:"Designer" %}
+        <div class="btn-group">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{% url "produk:newVarian" %}?next={{ request.path|urlencode }}">Brand-Model-Varian</a>
+                    <a class="dropdown-item" href="{% url "produk:newMaterial" %}?next={{ request.path|urlencode }}">Material</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if request.user|has_group:"Admin" %}
+        <div class="btn-group">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Tambah
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{% url "produk:newVarian" %}?next={{ request.path|urlencode }}">Brand-Model-Varian</a>
+                    <a class="dropdown-item" href="{% url "produk:newMaterial" %}?next={{ request.path|urlencode }}">Material</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container" style="margin-bottom:20px;margin-top:13px;">
+
+        <div class="card">
+             <div class="card-header" style="background-color:#d3d9df;">
+                <ul class="nav nav-pills nav-fill" role="tablist" style="background-color:#d3d9df;">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="bom-tab" data-toggle="tab" href="#bom" role="tab" aria-controls="bom" aria-selected="false">Bill of Materials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="listMaterial-tab" data-toggle="tab" href="#listMaterial" role="tab" aria-controls="listMaterial" aria-selected="true">Daftar Material</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="perubahanMaterial-tab" data-toggle="tab" href="#perubahanMaterial" role="tab" aria-controls="perubahanMaterial" aria-selected="true">Perubahan Material</a>
+                    </li>
+                </ul>
+             </div>
+
+            <div class="card-body tab-content">
+                {% include "produk/billOfMaterial.html" %}
+                {% include "produk/listMaterial.html" %}
+                {% include "produk/perubahanMaterialTemp.html" %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock contents %}

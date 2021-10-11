@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+{% block pageTitle %}
+    {{Judul}}
+    <br>
+    {% for sk in stasiunKerja %}
+        <h4>Produk: {{sk.liniProduksi_id}}</h4>
+        <h6>Stasiun Kerja: {{sk.idStasiunKerja}}</h6>
+    {% endfor %}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+    <div class="container bg-light" style="margin-bottom:20px;margin-top:13px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="{% url "liniProduksi:index" %}">Lini Produksi</a></li>
+                {% for sk in stasiunKerja %}
+                    <li class="breadcrumb-item" aria-current="page"><a href="{% url "liniProduksi:stasiunKerja" idProdukInput=sk.produk_id %}">{{sk.produk_id}}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{sk.idStasiunKerja}}</li>
+                {% endfor %}
+                {% for stasiun in produk %}
+
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container">
+    <table id="myTable" class="table table-hover" style="background-color:white;">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID Material</th>
+            <th scope="col">Jenis Material</th>
+            <th scope="col">Limit Dalam Storage</th>
+            <th scope="col">Opsi</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for material in semua_material %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{material.idMaterial}}</td>
+                <td>{{material.jenisMaterial}}</td>
+                <td>{{material.limitMaterial}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                    Hapus Material
+                    </button>
+                    {% include "produk/snippets/material_delete_modal.html" %}
+                    <a class="btn btn-warning" href="{% url "liniProduksi:updateMaterial" material.id %}">Edit Material</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <script>
+        function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+        } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+    </script>
+{% endblock contents %}

@@ -1,0 +1,76 @@
+<div class="tab-pane fade show active" id="bom" role="tabpanel" aria-labelledby="bom-tab">
+
+    <div class="row">
+            <div class="column" style="width:47.5%;margin-right:1%;margin-left:1.5%;">
+                <div class="card" style="margin-bottom:20px;">
+            <div class="card-body">
+                <h5><u>Bill of Material</u></h5>
+                <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Material</th>
+            <th>Nama Material</th>
+            <th>Jumlah Material</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for m in matBOM_jumlah %}
+        <tr>
+            <td>{{m.idMaterial}}</td>
+            <td>{{m.namaMaterial}}</td>
+            <td>{{m.jumlahKumulatif}}</td>
+            <td>
+                {{m.id}}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+            </div>
+
+            <div class="column" style="width:47.5%;margin-right:1.5%;margin-left:1%;">
+                <div class="card" style="margin-bottom:20px;">
+            <div class="card-body">
+                <h5><u>Supplier Material</u></h5>
+                <table class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>ID Material</th>
+            <th>Nama Supplier</th>
+            <th>Persentase Material</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for m in matBOM_jumlah %}
+        <tr>
+            <td>{{m.idMaterial}}</td>
+            <td>
+                {% for n in matBOM_supplier %}
+                    {% if n.idMaterial == m.idMaterial %}
+                        {{n.namaSupplier}}<br>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for n in matBOM_supplier %}
+                    {% if n.idMaterial == m.idMaterial %}
+                        {% widthratio n.jumlahKumulatif m.jumlahKumulatif 100 %} % <br>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+              </div>
+          </div>
+            </div>
+
+        </div>
+
+</div>

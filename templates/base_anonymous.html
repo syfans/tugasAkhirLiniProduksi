@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+    <style>
+        /* Container needed to position the button. Adjust the width as needed */
+.container {
+  position: relative;
+  width: 50%;
+}
+
+/* Make the image responsive */
+.container img {
+  width: 100%;
+  height: auto;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.container .btn2 {
+  position: absolute;
+  top: 88%;
+  left: 14%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #bae5dd;
+  color: #343a40;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width:10%;
+}
+
+
+.container .btn2:hover {
+  background-color: #f5f5f5;
+}
+
+
+    </style>
+    <link rel="shortcut icon" href="{% static 'img/adims1.png' type='image/x-icon' %}">
+    <title>
+        {% block Title %}
+
+        {% endblock Title %}
+    </title>
+
+    {% include "snippets/styles.html" %}
+
+</head>
+<body style="background-color: #343a40;">
+    {% include "snippets/navbar_anonymous.html" %}
+    <div >
+        <div>
+
+        <div>
+
+            {% block contents %}
+
+            {% endblock contents %}
+        </div>
+        </div>
+
+    </div>
+
+
+
+    {% include "snippets/scripts.html" %}
+</body>
+</html>
+
+

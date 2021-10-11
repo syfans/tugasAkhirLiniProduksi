@@ -1,0 +1,31 @@
+{% extends "mainBase.html" %}
+{% load static %}
+
+
+{% block Title %}
+    ADiMS | {{Judul}}
+{% endblock Title %}
+
+
+{% block pageTitle %}
+
+{% endblock pageTitle %}
+
+
+{% block contents %}
+    <div style="background-color:#343a40; position:fixed; height:100%; width:100%;margin-top:-11px;">
+<div class="container text-center" style="width: 40%;
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+    padding: 20px;
+    margin-top: 200px;
+    margin-left: 30%;background-color:#f5f5f5;">
+        <h3>Apakah anda yakin akan logout?</h3>
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" name="logout" class="btn btn-primary" value="Logout">
+        </form>
+    </div>
+        </div>
+
+{% endblock contents %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+
+    <div class="container">
+        <div class="card" style="margin-bottom:20px;margin-top:20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:index" %}">Semua Engineering Order</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:belumDisetujui" %}">Belum Disetujui</a>
+                    <a type="button" class="btn btn-primary w-100" href="{% url "engineeringOrder:disetujui" %}">Disetujui</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:tidakDisetujui" %}">Tidak Disetujui</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-hover text-center" style="background-color:white;">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nama Pengusul</th>
+                        <th scope="col">Departemen Pengusul</th>
+                        <th scope="col">Usulan ID Material yang Diubah</th>
+                        <th scope="col">Keterangan</th>
+                        <th scope="col">Tanggal Pengajuan</th>
+                        <th scope="col">Tanggal Persetujuan</th>
+                        <th scope="col">Tanggal Perubahan Mulai Berlaku</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for eo in eo %}
+                    <tr>
+                        <td>{{eo.idEO}}</td>
+                        <td>{{eo.namaPengusul}}</td>
+                        <td>{{eo.departemenPengusul}}</td>
+                        <td>
+                            <b>ID Material: {{eo.material.idMaterial}}</b> <br>
+                            Varian: {{eo.material.varian}} <br>
+                            Supplier: {{eo.material.namaSupplier}} <br>
+                            Penyusun Produk: {{eo.material.penyusunProduk}}
+                        </td>
+                        <td>{{eo.keterangan}}</td>
+                        <td>{{eo.tanggalPengajuan|date:"d-m-Y"}}</td>
+                        <td>{{eo.tanggalPersetujuan|date:"d-m-Y"}}</td>
+                        <td>{{eo.tanggalPerubahanBerlaku|date:"d-m-Y"}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+{% endblock contents %}

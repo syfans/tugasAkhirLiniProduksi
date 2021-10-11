@@ -1,0 +1,9 @@
+.container {
+    width: 30%;
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+    padding: 30px;
+}
+
+button {
+    width: 100%;
+}

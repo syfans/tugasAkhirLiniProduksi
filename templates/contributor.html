@@ -1,0 +1,20 @@
+{% extends "mainBase.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type='text/css' href="static/css/styles_index.css">
+{% endblock css %}
+
+{% block Title %}
+    ADiMS | {{Judul}}
+{% endblock Title %}
+
+
+{% block pageTitle %}
+{% endblock pageTitle %}
+
+
+{% block contents %}
+    <img src="{% static "img/contributor.png" %}" class="img-fluid" alt="Responsive image" style="margin-top:-60px;">
+{% endblock contents %}
+

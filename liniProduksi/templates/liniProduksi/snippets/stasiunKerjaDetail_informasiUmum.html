@@ -1,0 +1,35 @@
+{% for sk in stasiunKerja %}
+<div class="card" style="width:45%;margin:auto;height:185px;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h3><u>Informasi Umum</u></h3>
+            </div>
+
+            <div class="col-md-6">
+<!--                <div class="dropdown" style="float:right;">-->
+<!--                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opsi</button>-->
+<!--                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+<!--                        <a class="dropdown-item" href="{% url "liniProduksi:deleteStasiunKerja" sk.id %}">Hapus</a>-->
+<!--                        <a class="dropdown-item" href="{% url "liniProduksi:updateStasiunKerja" sk.id %}">Edit</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+
+
+        <table class="table table-hover" id="tb2">
+            <thead>
+            <tr>
+                <th>ID Stasiun Kerja</th>
+                <td>{{sk.idStasiunKerja}}</td>
+            </tr>
+            <tr>
+                <th>Nomor - Sisi Stasiun Kerja</th>
+                <td>{{sk.nomorStasiunKerja}} - {{sk.sisiStasiunKerja}}</td>
+            </tr>
+            {% endfor %}
+            </thead>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% load has_group %}
+
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+
+    <div class="container">
+        <div class="card" style="margin-bottom:20px;margin-top:20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-primary w-100" href="{% url "engineeringOrder:index" %}">Semua Engineering Order</a>
+                    {% if request.user|has_group:"Designer" %}
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:belumDisetujui" %}">Belum Disetujui</a>
+                    {% endif %}
+                    {% if request.user|has_group:"Admin" %}
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:belumDisetujui" %}">Belum Disetujui</a>
+                    {% endif %}
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:disetujui" %}">Disetujui</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "engineeringOrder:tidakDisetujui" %}">Tidak Disetujui</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="text-right" style="margin-bottom:20px;">
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <a class="btn btn-primary" href="{% url "engineeringOrder:newEO" %}">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Tambah Engineering Order
+                        </a>
+                    </div>
+                </div>
+
+                <table class="table table-hover text-center" style="background-color:white;">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Pengusul</th>
+                        <th colspan="4">Usulan Material yang Diubah</th>
+                        <th colspan="4">Material Pengganti</th>
+                        <th scope="col">Alasan</th>
+                        <th scope="col">Tanggal Pengajuan</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for eo in eo %}
+                    <tr>
+                        <td>{{eo.idEO}}</td>
+                        <td>
+                            Nama: {{eo.namaPengusul}}<br>
+                            Departemen: {{eo.departemenPengusul}}
+                        </td>
+                        <td><b>ID Material: {{eo.material.idMaterial}}</b></td>
+                        <td>Varian: {{eo.material.varian}}</td>
+                        <td>Supplier: {{eo.material.namaSupplier}}</td>
+                        <td>Penyusun Produk: {{eo.material.penyusunProduk}}</td>
+                        {% for mat in mat %}
+                        {% if eo.material == mat.penggantiMaterial %}
+                        <td>
+                            <b>ID Material: {{mat.idMaterial}}</b> <br>
+                            Varian: {{mat.varian}} <br>
+                            Supplier: {{mat.namaSupplier}} <br>
+                            Penyusun Produk: {{mat.penyusunProduk}}
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                        <td>{{eo.keterangan}}</td>
+                        <td>{{eo.tanggalPengajuan|date:"d-m-Y"}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+{% endblock contents %}

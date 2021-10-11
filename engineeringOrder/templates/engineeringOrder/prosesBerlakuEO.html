@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block Title %}
+    Lini Produksi | {{Judul}}
+{% endblock Title %}
+
+{% block pageTitle %}
+
+{% endblock pageTitle %}
+
+{% block contents %}
+
+    <div class="container" style="width: 50%;
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+    padding: 30px;
+    margin-top: 150px;
+    margin-bottom: 30px;
+    margin-left: 25%">
+            <fieldset class="from-group">
+                <legend align="center">{{Judul}} ({{mat.idMaterial}})</legend>
+            </fieldset>
+            <table class="table">
+                <tr>
+                    <th>Stasiun Kerja</th>
+                    <td>{{mat_kebutuhan.stasiunKerja}}</td>
+                </tr>
+                <tr>
+                    <th>Proses</th>
+                    <td>({{mat_kebutuhan.proses.idProses}}) {{mat_kebutuhan.proses.namaProses}}</td>
+                </tr>
+            </table>
+            <br>
+        <div class="text-center">
+            <h3>Apakah proses sebelum tetap berlaku?</h3>
+            <a href="{% url "engineeringOrder:prosesLamaBerlakuEO" eo.id %}" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"></i> Ya</a>
+            <br>
+            <br>
+            <a href="{% url "engineeringOrder:prosesLamaTidakBerlakuEO" eo.id %}" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Tidak</a>
+        </div>
+    </div>
+{% endblock contents %}

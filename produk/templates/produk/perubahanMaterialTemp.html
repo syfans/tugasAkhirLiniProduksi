@@ -1,0 +1,56 @@
+<div class="tab-pane fade" id="perubahanMaterial" role="tabpanel" aria-labelledby="perubahanMaterial-tab">
+
+            <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th>Material</th>
+                <th>Nama Supplier</th>
+                <th>Penyusun dari Produk</th>
+                <th>Tanggal Material Ganti</th>
+                <th>Alasan</th>
+            </tr>
+            </thead>
+
+                <tbody>
+                {% for m in matUbah %}
+                <tr>
+                    <td>({{m.idMaterial}}) {{m.namaMaterial}}</td>
+                    <td>{{m.namaSupplier}}</td>
+                    <td>{{m.penyusunProduk}}</td>
+                    <td>{{m.tanggalGanti|date:"d-m-Y"}}</td>
+                    {% if m.keterangan == None %}
+                    <td></td>
+                    {% endif %}
+                    {% if m.keterangan != None %}
+                <td>
+                    {{m.keterangan|truncatechars:80}}
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong{{m.id}}">
+                        detail
+                    </button>
+
+                                <!-- Modal -->
+                            <div class="modal fade" id="exampleModalLong{{m.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle{{m.id}}" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Alasan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      {{m.keterangan}}
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" style="width=30%;" data-dismiss="modal">Tutup</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                </td>
+                {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+</div>

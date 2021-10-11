@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block Title %}
+    Sistem Penjadwalan | {{Judul}}
+{% endblock Title %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+{% block pageTitle %}
+    {{Judul}}
+{% endblock pageTitle %}
+
+{% block contents %}
+    <link rel="stylesheet" type='text/css' href="{% static css %}">
+
+    <div class="container">
+        <div class="card" style="margin-top:15px;margin-bottom: 20px;">
+            <div class="card-header" style="background-color:#d3d9df;">
+                <div class="btn-group d-flex" role="group" >
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:index" %}">Semua Jadwal</a>
+                    <a type="button" class="btn btn-link w-100" href="{% url "jadwal:belumKonfirmasi" %}">Belum Konfirmasi</a>
+                    <a type="button" class="btn btn-primary w-100" href="{% url "jadwal:sudahKonfirmasi" %}">Sudah Konfirmasi</a>
+                </div>
+            </div>
+
+            <div class="card-header text-center">
+                <a class="btn btn-success" href="{% url "jadwal:sudahKonfirmasi" %}">Semua</a>
+                {% for sk in sk %}
+                <a class="btn btn-warning" href="{% url "jadwal:sudahKonfirmasi_SK" sk.idStasiunKerja %}">{{sk.idStasiunKerja}}</a>
+                {% endfor %}
+            </div>
+
+            <div class="card-body">
+                <table id="myTable" class="table table-hover text-center" style="background-color:white; margin-top:20px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID Stasiun Kerja</th>
+                        <th scope="col">ID Material</th>
+                        <th scope="col">Jumlah Material</th>
+                        <th scope="col">Tanggal (dd/mm/yyyy)</th>
+                        <th scope="col">Waktu Kedatangan</th>
+                        <th scope="col">Waktu Kedatangan Aktual</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for jk in jadwalKonfirmasi %}
+                    <tr>
+                        <td>{{jk.kebutuhanMaterial.stasiunKerja}}</td>
+                        <td>[{{jk.kebutuhanMaterial.material.varian}}] {{jk.kebutuhanMaterial.material}}</td>
+                        <td>{{jk.jumlah_material}}</td>
+                        <td>{{jk.tanggal|date:"d/m/Y"}}</td>
+                        <td>{{jk.jadwalKedatangan|time:"H:i:s"}}</td>
+                        <td>{{jk.jadwalKedatangan_aktual|time:"H:i:s"}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock contents %}
